@@ -15,6 +15,7 @@ contract Campaign {
     uint public minimumContribution;
     //address[] public approvers;
     mapping(address => bool) public approvers;
+    uint public approversCount;
 
     modifier restricted(){
         require(msg.sender == manager)'
@@ -28,6 +29,7 @@ contract Campaign {
     function contribute() payable {
         require(msg.value > minimumContribution);
         approvers[msg.sender] = true;
+        approversCount++;
     }
 
     function createRequest(description,value,recipient) public restricted{
@@ -45,15 +47,21 @@ contract Campaign {
     function approveRequest(uint index)public{
         Request storage request = requests[index];
 
-        //is he a contributor
+        //is he a contributor?true
         require(approvers[msg.sender]);
-        //did he vote already
-        require(request.approvals[msg.sender])
+        //did he vote already?false
+        require(!request.approvals[msg.sender])
 
         request.approvals[msg.sender] = true;
         request.approvalsCount++;
 
-
+    }
+    function finalizeRequest(uint index) public restricted{
+        Request storage request = requests[index];
+        require(request.approvalsCount > approversCount/2);
+        require(!request.complete);
+        request.recipient.transfer(request.value);
+        request.complete = true;
     }
     
 }
