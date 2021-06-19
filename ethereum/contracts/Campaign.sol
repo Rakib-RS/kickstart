@@ -4,14 +4,15 @@ contract Campaign {
     struct Request{
         string description;
         uint value;
-       address recipient;
-       bool complete;
+        address recipient;
+        bool complete;
     }
 
     Request[] public request;
     address public manager;
     uint public minimumContribution;
-    address[] public approvers;
+    //address[] public approvers;
+    mapping(address => bool) public approvers;
 
     modifier restricted(){
         require(msg.sender == manager)'
@@ -24,7 +25,7 @@ contract Campaign {
     }
     function contribute() payable {
         require(msg.value > minimumContribution);
-        approvers.push(msg.sender);
+        approvers[msg.sender] = true;
     }
 
     function createRequest(description,value,recipient) public restricted{
