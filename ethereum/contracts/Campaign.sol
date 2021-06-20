@@ -12,7 +12,7 @@ contract CampaignFactory{
 }
 
 contract Campaign {
-    struct Request{
+    struct Request {
         string description;
         uint value;
         address recipient;
@@ -28,13 +28,13 @@ contract Campaign {
     mapping(address => bool) public approvers;
     uint public approversCount;
 
-    modifier restricted(){
-        require(msg.sender == manager)'
+    modifier restricted() {
+        require(msg.sender == manager);
         _;
     }
-    function Campaign(uint contribution,address creator)public {
+    function Campaign(uint contribution,address creator) public {
         manager = creator;
-        minimumContribution = contribution
+        minimumContribution = contribution;
         
     }
     function contribute() payable {
@@ -43,7 +43,7 @@ contract Campaign {
         approversCount++;
     }
 
-    function createRequest(description,value,recipient) public restricted{
+    function createRequest(string description,uint value,address recipient) public restricted{
         Request memory newRequest = Request({
             description:description,
             value:value,
@@ -51,17 +51,17 @@ contract Campaign {
             complete:false,
             approvalsCount:0
 
-        })
+        });
         requests.push(newRequest);
     }
 
-    function approveRequest(uint index)public{
+    function approveRequest(uint index) public {
         Request storage request = requests[index];
 
         //is he a contributor?true
         require(approvers[msg.sender]);
         //did he vote already?false
-        require(!request.approvals[msg.sender])
+        require(!request.approvals[msg.sender]);
 
         request.approvals[msg.sender] = true;
         request.approvalsCount++;
