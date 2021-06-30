@@ -1,14 +1,21 @@
 import { Menu } from "semantic-ui-react";
 import React from "react";
+import { Link } from "../routes";
 
-export default () =>{
-    return(
-        <Menu>
-            <Menu.Item>kickstart</Menu.Item>
-            <Menu.Menu position="right">
-                <Menu.Item>Campaigns</Menu.Item>
-                <Menu.Item>+</Menu.Item>
-            </Menu.Menu>
-        </Menu>
-    )
-}
+export default () => {
+  return (
+    <Menu>
+      <Link route="/">
+        <a className="item">kickstart</a>
+      </Link>
+      <Menu.Menu position="right">
+        <Link route="/">
+          <a className="item">campaigns</a>
+        </Link>
+        <Link route="/campaigns/new">
+          <a className="item">+</a>
+        </Link>
+      </Menu.Menu>
+    </Menu>
+  );
+};
