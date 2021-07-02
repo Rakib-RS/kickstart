@@ -2,7 +2,7 @@ import { Menu } from "semantic-ui-react";
 import React from "react";
 import { Link } from "../routes";
 
-export default () => {
+const header = () => {
   return (
     <Menu>
       <Link route="/">
@@ -19,3 +19,4 @@ export default () => {
     </Menu>
   );
 };
+export default header;
