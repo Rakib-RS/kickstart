@@ -10,13 +10,16 @@ class RequestIndex extends Component {
     const campaign = Campaign(address);
 
     const length = await campaign.methods.getRequestsCount().call();
-    const requests = await Promise.all(
-      Array(length)
-        .fill()
-        .map((element, index) => {
-          return campaign.methods.requests(index).call();
-        })
-    );
+    let requests;
+    if (length > 0) {
+      requests = await Promise.all(
+        Array(length)
+          .fill()
+          .map((element, index) => {
+            return campaign.methods.requests(index).call();
+          })
+      );
+    }
     const approversCount = await campaign.methods.approversCount().call();
     return { address, length, requests, approversCount };
   }
@@ -34,7 +37,7 @@ class RequestIndex extends Component {
     });
   }
   render() {
-    const { address } = this.props;
+    const { address, length } = this.props;
     const { HeaderCell, Body, Row, Header } = Table;
     //console.log(requests);
     return (
@@ -56,8 +59,9 @@ class RequestIndex extends Component {
               <HeaderCell>Finalize</HeaderCell>
             </Row>
           </Header>
-          <Body>{this.renderRow()}</Body>
+          {length > 0 ? <Body>{this.renderRow()}</Body> : null}
         </Table>
+        <div>Found {length} Requests</div>
       </Layout>
     );
   }
