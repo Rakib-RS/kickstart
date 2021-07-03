@@ -7,7 +7,7 @@ import { Router } from "../routes";
 class RequestTable extends Component {
   state = {
     loading: false,
-    loadingf:false
+    loadingf: false,
   };
   approveRequest = async () => {
     const campaign = Campaign(this.props.address);
@@ -40,8 +40,9 @@ class RequestTable extends Component {
   render() {
     const { Row, Cell } = Table;
     const { id, request, approversCount } = this.props;
+    const readyFinalize = request.approvalsCount> approversCount/2;
     return (
-      <Row>
+      <Row disabled={request.complete} positive={readyFinalize && !request.complete}>
         <Cell>{id}</Cell>
         <Cell>{request.description}</Cell>
         <Cell>{web3.utils.fromWei(request.value, "ether")}</Cell>
@@ -50,24 +51,28 @@ class RequestTable extends Component {
           {request.approvalsCount}/{approversCount}
         </Cell>
         <Cell>
-          <Button
-            color="green"
-            basic
-            onClick={this.approveRequest}
-            loading={this.state.loading}
-          >
-            approve
-          </Button>
+          {request.complete ? null : (
+            <Button
+              color="green"
+              basic
+              onClick={this.approveRequest}
+              loading={this.state.loading}
+            >
+              approve
+            </Button>
+          )}
         </Cell>
         <Cell>
-          <Button
-            color="teal"
-            basic
-            onClick={this.finalizeRequest}
-            loading={this.state.loadingf}
-          >
-            finalize
-          </Button>
+          {request.complete ? null : (
+            <Button
+              color="teal"
+              basic
+              onClick={this.finalizeRequest}
+              loading={this.state.loadingf}
+            >
+              finalize
+            </Button>
+          )}
         </Cell>
       </Row>
     );
