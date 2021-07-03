@@ -16,18 +16,25 @@ class RequestIndex extends Component {
         .map((element, index) => {
           return campaign.methods.requests(index).call();
         })
-      
     );
     const approversCount = await campaign.methods.approversCount().call();
-    return { address, length, requests,approversCount };
+    return { address, length, requests, approversCount };
   }
   renderRow() {
     return this.props.requests.map((request, index) => {
-      return <RequestTable key={index} id={index} request={request} approversCount={this.props.approversCount} />;
+      return (
+        <RequestTable
+          key={index}
+          id={index}
+          request={request}
+          approversCount={this.props.approversCount}
+          address={this.props.address}
+        />
+      );
     });
   }
   render() {
-    const { address} = this.props;
+    const { address } = this.props;
     const { HeaderCell, Body, Row, Header } = Table;
     //console.log(requests);
     return (
